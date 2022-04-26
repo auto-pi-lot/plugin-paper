@@ -6,7 +6,7 @@ import timeit
 import argparse
 import typing
 from pathlib import Path
-from .helpers import Result
+from plugin_tests.scripts.helpers import Result
 
 
 def test_write(n_reps:int = 10000, doprint:bool = True) -> Result:
