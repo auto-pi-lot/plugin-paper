@@ -31,12 +31,12 @@ def test_write(n_reps:int = 10000, doprint:bool = True) -> Result:
 
 def make_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description = "Test GPIO Speed outside of a task/pilot context")
+        "Test GPIO Speed outside of a task/pilot context")
     parser.add_argument(
-        'n_reps', description="Number of times to run each test",
+        'n_reps', help="Number of times to run each test",
         type=int, default=10000)
     parser.add_argument(
-        '--quiet', description="Don't print results to stdout", action="store_false"
+        '--quiet', help="Don't print results to stdout", action="store_false"
     )
     return parser
 

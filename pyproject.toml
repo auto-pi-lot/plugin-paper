@@ -4,6 +4,9 @@ version = "0.1.0"
 description = "Tests for the autopilot paper"
 authors = ["sneakers-the-rat <JLSaunders987@gmail.com>"]
 license = "Unlicense"
+packages = [
+    { include = "plugin_tests" }
+]
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.10"
