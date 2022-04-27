@@ -20,7 +20,7 @@ def test_write(n_reps:int = 10000, doprint:bool = True, iti:float = 1) -> Result
         start_time = time.perf_counter_ns()
         pin.set(set_to)
         times.append(time.perf_counter_ns() - start_time)
-        set_to = ~set_to
+        set_to = not set_to
         time.sleep(iti/1000)
 
     result = Result(times=times, test="write")
