@@ -20,11 +20,11 @@ class Result:
 
     @property
     def mean(self) -> float:
-        return np.mean(self.times)[0]
+        return float(np.mean(self.times))
 
     @property
     def std(self) -> float:
-        return np.std(self.times)[0]
+        return float(np.std(self.times))
 
     def __str__(self) -> str:
         return (
