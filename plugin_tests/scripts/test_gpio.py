@@ -61,4 +61,5 @@ if __name__ == "__main__":
     results = Results(tests='gpio')
     results.append(test_write(n_reps=args.n_reps, result=True, doprint=args.quiet, iti=args.iti))
     results.append(test_write(n_reps=args.n_reps, result=False, doprint=args.quiet, iti=args.iti))
-    results.write()
+    path = results.write()
+    print(f"Wrote results to {str(path)}")

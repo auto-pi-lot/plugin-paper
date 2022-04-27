@@ -63,3 +63,5 @@ class Results:
 
         with open(path, 'w') as jpath:
             json.dump(self.dict(), jpath)
+
+        return path
