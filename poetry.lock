@@ -54,7 +54,7 @@ datajoint = ["datajoint-babel (>=0.1.3,<0.2.0)"]
 type = "git"
 url = "https://github.com/wehr-lab/autopilot"
 reference = "v0.5.0"
-resolved_reference = "b175f3a26ad7bfb387443b3dab3adf950f134f43"
+resolved_reference = "ef67374b346866d2c0f233f4a831348b8682d19d"
 
 [[package]]
 name = "blosc2"
@@ -252,7 +252,7 @@ python-versions = "*"
 
 [[package]]
 name = "pigpio"
-version = "1.78"
+version = "1.79"
 description = "Raspberry Pi GPIO module"
 category = "main"
 optional = false
@@ -263,7 +263,7 @@ develop = false
 type = "git"
 url = "https://github.com/sneakers-the-rat/pigpio"
 reference = "master"
-resolved_reference = "280280dfc95ab22b4e80db0964de3dd64ae7a301"
+resolved_reference = "f0c18a6126a02f165e28e5c5e89bef1a87ea3d66"
 
 [[package]]
 name = "pillow"

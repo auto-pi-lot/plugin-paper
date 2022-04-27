@@ -10,7 +10,7 @@ from plugin_tests.scripts.helpers import Result
 from tqdm import tqdm, trange
 
 
-def test_write(n_reps:int = 10000, doprint:bool = True, iti:float = 1) -> Result:
+def test_write(n_reps:int = 10000, result:bool=True, doprint:bool = True, iti:float = 1) -> Result:
     # get the configuration for our output pin from prefs.json
     pin_conf = prefs.get('HARDWARE')['GPIO']['digi_out']
     pin = Digital_Out(**pin_conf)
@@ -18,12 +18,17 @@ def test_write(n_reps:int = 10000, doprint:bool = True, iti:float = 1) -> Result
     times = []
     for i in trange(n_reps):
         start_time = time.perf_counter_ns()
-        pin.set(set_to)
+        pin.set(set_to, result)
         times.append(time.perf_counter_ns() - start_time)
         set_to = not set_to
         time.sleep(iti/1000)
 
-    result = Result(times=times, test="write")
+    if not result:
+        test_name = "write_noresult"
+    else:
+        test_name = "write"
+
+    result = Result(times=times, test=test_name)
 
     if doprint:
         print(result)
@@ -52,5 +57,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     results = {}
-    results['write'] = test_write(n_reps=args.n_reps, doprint=args.quiet, iti=args.iti)
-
+    results['write'] = test_write(n_reps=args.n_reps, result=True, doprint=args.quiet, iti=args.iti)
+    results['write_noresult'] = test_write(n_reps=args.n_reps, result=False, doprint=args.quiet, iti=args.iti)
