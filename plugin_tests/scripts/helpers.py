@@ -1,6 +1,10 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, Field
 import typing
 import numpy as np
+from pathlib import Path
+from datetime import datetime
+from autopilot import prefs
+import json
 
 @dataclass
 class Result:
@@ -26,6 +30,14 @@ class Result:
     def std(self) -> float:
         return float(np.std(self.times))
 
+    def dict(self) -> dict:
+        return {
+            'test': self.test,
+            'times': self.times,
+            'mean': self.mean,
+            'std': self.std
+        }
+
     def __str__(self) -> str:
         return (
             f"Test: {self.test}\nReps: {len(self.times)}\n"
@@ -33,3 +45,21 @@ class Result:
             f"Mean: {np.round(self.mean/1000000, self.precision)}ms\n"
             f"Standard Deviation: +/-{np.round(self.std/1000000, self.precision)}"
             )
+
+@dataclass
+class Results:
+    tests: str
+    results: typing.Optional[typing.List[Result]] = Field(default_factory=list)
+
+    def append(self, result:Result):
+        self.results.append(result)
+
+    def dict(self) -> typing.List[dict]:
+        return [r.dict() for r in self.results]
+
+    def write(self, path:typing.Optional[Path]=None):
+        if not path:
+            path = Path(prefs.get('DATADIR')) / f"tests-{self.tests}-{datetime.now().strftime('%y%m%dT%H%M%S')}.json"
+
+        with open(path, 'w') as jpath:
+            json.dump(self.dict(), jpath)

@@ -6,8 +6,10 @@ import timeit
 import argparse
 import typing
 from pathlib import Path
-from plugin_tests.scripts.helpers import Result
+from plugin_tests.scripts.helpers import Result, Results
 from tqdm import tqdm, trange
+import datetime
+import json
 
 
 def test_write(n_reps:int = 10000, result:bool=True, doprint:bool = True, iti:float = 1) -> Result:
@@ -56,6 +58,7 @@ if __name__ == "__main__":
     parser = make_parser()
     args = parser.parse_args()
 
-    results = {}
-    results['write'] = test_write(n_reps=args.n_reps, result=True, doprint=args.quiet, iti=args.iti)
-    results['write_noresult'] = test_write(n_reps=args.n_reps, result=False, doprint=args.quiet, iti=args.iti)
+    results = Results(tests='gpio')
+    results.append(test_write(n_reps=args.n_reps, result=True, doprint=args.quiet, iti=args.iti))
+    results.append(test_write(n_reps=args.n_reps, result=False, doprint=args.quiet, iti=args.iti))
+    results.write()
