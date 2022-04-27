@@ -39,12 +39,16 @@ class Result:
         }
 
     def __str__(self) -> str:
-        return (
-            f"Test: {self.test}\nReps: {len(self.times)}\n"
-            f"--------------\n"
-            f"Mean: {np.round(self.mean/1000000, self.precision)}ms\n"
-            f"Standard Deviation: +/-{np.round(self.std/1000000, self.precision)}"
-            )
+        topsep = "="*40 + "\n"
+        midsep = '-'*40 + "\n"
+        return topsep + \
+            f"Test: {self.test}\nReps: {len(self.times)}\n" + \
+            midsep + \
+            (
+                f"Mean: {np.round(self.mean/1000000, self.precision)}ms\n"
+                f"Standard Deviation: +/-{np.round(self.std/1000000, self.precision)}\n"
+            ) + \
+            topsep
 
 @dataclass
 class Results:

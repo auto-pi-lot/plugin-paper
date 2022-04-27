@@ -11,6 +11,8 @@ packages = [
 [tool.poetry.dependencies]
 python = ">=3.9,<3.10"
 auto-pi-lot = {git="https://github.com/wehr-lab/autopilot", branch="v0.5.0", extras=['pilot']}
+gpiozero = "^1.6.2"
+"RPi.GPIO" = "^0.7.1"
 
 
 [tool.poetry.dev-dependencies]
