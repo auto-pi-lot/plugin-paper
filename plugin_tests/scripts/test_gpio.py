@@ -18,7 +18,7 @@ def test_write(n_reps:int = 10000, result:bool=True, doprint:bool = True, iti:fl
     pin = Digital_Out(**pin_conf)
     set_to = True
     times = []
-    for i in trange(n_reps, miniterval=1):
+    for i in trange(n_reps, mininterval=1):
         start_time = time.perf_counter_ns()
         pin.set(set_to, result)
         times.append(time.perf_counter_ns() - start_time)
