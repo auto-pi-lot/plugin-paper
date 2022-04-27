@@ -15,6 +15,7 @@ class Digital_Out_Zero(Hardware):
     """
 
     def __init__(self, pin:int, polarity:int=1, zero_kwargs:Optional[dict]=None, **kwargs):
+        self._device = None
         super(Digital_Out_Zero, self).__init__(**kwargs)
 
         if zero_kwargs is None:
