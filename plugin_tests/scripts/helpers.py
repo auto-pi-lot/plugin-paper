@@ -1,4 +1,4 @@
-from dataclasses import dataclass, Field
+from dataclasses import dataclass, field
 import typing
 import numpy as np
 from pathlib import Path
@@ -49,7 +49,7 @@ class Result:
 @dataclass
 class Results:
     tests: str
-    results: typing.Optional[typing.List[Result]] = Field(default_factory=list)
+    results: typing.Optional[typing.List[Result]] = field(default_factory=list)
 
     def append(self, result:Result):
         self.results.append(result)
