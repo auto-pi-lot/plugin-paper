@@ -7,6 +7,7 @@ import argparse
 import typing
 from pathlib import Path
 from plugin_tests.scripts.helpers import Result
+from tqdm import tqdm, trange
 
 
 def test_write(n_reps:int = 10000, doprint:bool = True, iti:float = 1) -> Result:
@@ -15,7 +16,7 @@ def test_write(n_reps:int = 10000, doprint:bool = True, iti:float = 1) -> Result
     pin = Digital_Out(**pin_conf)
     set_to = True
     times = []
-    for i in range(n_reps):
+    for i in trange(n_reps):
         start_time = time.perf_counter_ns()
         pin.set(set_to)
         times.append(time.perf_counter_ns() - start_time)
