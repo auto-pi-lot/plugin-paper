@@ -18,7 +18,7 @@ def test_write(n_reps:int = 10000, result:bool=True, doprint:bool = True, iti:fl
     pin = Digital_Out(**pin_conf)
     set_to = True
     times = []
-    for i in trange(n_reps):
+    for i in trange(n_reps, miniterval=1):
         start_time = time.perf_counter_ns()
         pin.set(set_to, result)
         times.append(time.perf_counter_ns() - start_time)
@@ -59,7 +59,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     results = Results(tests='gpio')
-    results.append(test_write(n_reps=args.n_reps, result=True, doprint=args.quiet, iti=args.iti))
-    results.append(test_write(n_reps=args.n_reps, result=False, doprint=args.quiet, iti=args.iti))
-    path = results.write()
-    print(f"Wrote results to {str(path)}")
+    try:
+        results.append(test_write(n_reps=args.n_reps, result=True, doprint=args.quiet, iti=args.iti))
+        results.append(test_write(n_reps=args.n_reps, result=False, doprint=args.quiet, iti=args.iti))
+    finally:
+        path = results.write()
+        print(f"Wrote results to {str(path)}")
