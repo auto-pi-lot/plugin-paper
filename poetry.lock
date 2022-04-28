@@ -43,10 +43,10 @@ tqdm = "^4.62.3"
 validators = "^0.18.2"
 
 [package.extras]
-pilot = ["pigpio @ git+https://github.com/sneakers-the-rat/pigpio@master", "JACK-Client (>=0.5.3,<0.6.0)"]
+pilot = ["pigpio", "JACK-Client (>=0.5.3,<0.6.0)"]
 terminal = ["pyqtgraph (>=0.12.3,<0.13.0)", "PySide2 (>=5.15.2,<6.0.0)"]
-docs = ["Sphinx (>=4.3.1,<5.0.0)", "autodocsumm (>=0.2.7,<0.3.0)", "matplotlib (>=3.5.1,<4.0.0)", "sphinxcontrib-bibtex (>=2.4.1,<3.0.0)", "scikit-learn (>=1.0.1,<2.0.0)", "altair (>=4.1.0,<5.0.0)", "bokeh (>=2.4.2,<3.0.0)", "colorcet (>=3.0.0,<4.0.0)", "sphinx-rtd-theme (>=1.0.0,<2.0.0)", "sphinx-sass @ git+https://github.com/sneakers-the-rat/sphinx-sass@master", "pytest (>=7.0.0,<8.0.0)", "rich (>=11.2.0,<12.0.0)"]
-tests = ["pytest (>=7.0.0,<8.0.0)", "pytest-cov (>=3.0.0,<4.0.0)", "pylint (>=2.12.2,<3.0.0)", "coveralls (>=3.3.1,<4.0.0)", "pytest-qt (>=3.3.0,<3.4.0)", "pigpio @ git+https://github.com/sneakers-the-rat/pigpio@master", "PySide2 (>=5.15.2,<6.0.0)", "pyqtgraph (>=0.12.3,<0.13.0)", "rich (>=11.2.0,<12.0.0)"]
+docs = ["Sphinx (>=4.3.1,<5.0.0)", "autodocsumm (>=0.2.7,<0.3.0)", "matplotlib (>=3.5.1,<4.0.0)", "sphinxcontrib-bibtex (>=2.4.1,<3.0.0)", "scikit-learn (>=1.0.1,<2.0.0)", "altair (>=4.1.0,<5.0.0)", "bokeh (>=2.4.2,<3.0.0)", "colorcet (>=3.0.0,<4.0.0)", "sphinx-rtd-theme (>=1.0.0,<2.0.0)", "sphinx-sass", "pytest (>=7.0.0,<8.0.0)", "rich (>=11.2.0,<12.0.0)"]
+tests = ["pytest (>=7.0.0,<8.0.0)", "pytest-cov (>=3.0.0,<4.0.0)", "pylint (>=2.12.2,<3.0.0)", "coveralls (>=3.3.1,<4.0.0)", "pytest-qt (>=3.3.0,<3.4.0)", "pigpio", "PySide2 (>=5.15.2,<6.0.0)", "pyqtgraph (>=0.12.3,<0.13.0)", "rich (>=11.2.0,<12.0.0)"]
 plotting = ["altair (>=4.1.0,<5.0.0)", "bokeh (>=2.4.2,<3.0.0)", "colorcet (>=3.0.0,<4.0.0)"]
 datajoint = ["datajoint-babel (>=0.1.3,<0.2.0)"]
 
@@ -121,6 +121,21 @@ description = "Decorators for Humans"
 category = "main"
 optional = false
 python-versions = ">=3.5"
+
+[[package]]
+name = "ds1054z"
+version = "0.4.0"
+description = "Python package and software for the Rigol DS1054Z oscilloscope."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+python_vxi11 = "*"
+
+[package.extras]
+discovery = ["zeroconf"]
+savescreen = ["pillow"]
 
 [[package]]
 name = "gpiozero"
@@ -381,6 +396,14 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
 six = ">=1.5"
 
 [[package]]
+name = "python-vxi11"
+version = "0.9"
+description = "Python VXI-11 driver for controlling instruments over Ethernet"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "pytz"
 version = "2022.1"
 description = "World timezone definitions, modern and historical"
@@ -561,7 +584,7 @@ test = ["pytest (>=2.2.3)", "flake8 (>=2.4.0)", "isort (>=4.2.2)"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.9,<3.10"
-content-hash = "f6715d668d6e82d786bd2b6d029fcc476ed825894ec29d15bc56eeeec9934b35"
+content-hash = "12ad6b86293bc3074c54f7f008dc16d89fd878db00f3539c77fd8564c2cdfa0f"
 
 [metadata.files]
 attrs = [
@@ -655,6 +678,9 @@ colorzero = [
 decorator = [
     {file = "decorator-5.1.1-py3-none-any.whl", hash = "sha256:b8c3f85900b9dc423225913c5aace94729fe1fa9763b38939a95226f02d37186"},
     {file = "decorator-5.1.1.tar.gz", hash = "sha256:637996211036b6385ef91435e4fae22989472f9d571faba8927ba8253acbc330"},
+]
+ds1054z = [
+    {file = "ds1054z-0.4.0.tar.gz", hash = "sha256:ce85cf839606bf8edc6b62885d93d99e32389935581c416b495018d7b64dbbd5"},
 ]
 gpiozero = [
     {file = "gpiozero-1.6.2-py2.py3-none-any.whl", hash = "sha256:9af00b90d4fa775aa1fc023363e4aa5539844a5b0c461be5ced5cfabba364d99"},
@@ -912,6 +938,11 @@ pyrsistent = [
 python-dateutil = [
     {file = "python-dateutil-2.8.2.tar.gz", hash = "sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86"},
     {file = "python_dateutil-2.8.2-py2.py3-none-any.whl", hash = "sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9"},
+]
+python-vxi11 = [
+    {file = "python-vxi11-0.9.tar.gz", hash = "sha256:01fbd8d5be09352c6be46ae474a47d4fe44be2989f7e977c578c55733b076dff"},
+    {file = "python_vxi11-0.9-py2.7.egg", hash = "sha256:24f91680d9c9f01b58c35d0e259051fd4ecb9508f43e5207414bd562c1edd011"},
+    {file = "python_vxi11-0.9-py3.6.egg", hash = "sha256:282b544e039e975b495f8a6b3fb10b2a428d2b8fb503f80d4ff5f518c4deefe8"},
 ]
 pytz = [
     {file = "pytz-2022.1-py2.py3-none-any.whl", hash = "sha256:e68985985296d9a66a881eb3193b0906246245294a881e7c8afe623866ac6a5c"},

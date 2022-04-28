@@ -70,9 +70,6 @@ def test_readwrite(runtime:float=60) -> Result:
     pin_out = Digital_Out(**out_conf)
     pin_in = Digital_In(**in_conf)
 
-    global n_times
-    n_times = 0
-
     def turn_on_off(*args):
         pin_out.set(True)
         time.sleep(0.001)
@@ -88,8 +85,32 @@ def test_readwrite(runtime:float=60) -> Result:
     except KeyboardInterrupt:
         pass
     finally:
+        pin_in.release()
+        pin_out.release()
         return Result([0], test="readwrite")
-        
+
+def test_readwrite_script(runtime:float=60):
+    """Latency from input to output using pigpio scripts"""
+    out_conf = prefs.get('HARDWARE')['GPIO']['digi_out']
+    in_conf = prefs.get('HARDWARE')['GPIO']['digi_in']
+    pin_out = Digital_Out(**out_conf)
+    pin_in = Digital_In(**in_conf)
+
+    script = " ".join([
+        "tag 999",
+        f"w {pin_out.pin_bcm}"
+        f"r {pin_in.pin_bcm}",
+        f"jp 999"
+    ])
+
+    try:
+        script_id = pin_out.pig.store_script(script)
+        pin_out.pig.run_script(script_id)
+    finally:
+        pin_out.pig.stop_script(script_id)
+        pin_out.release()
+        pin_in.release()
+
 
 def make_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
@@ -125,7 +146,8 @@ if __name__ == "__main__":
         lambda: test_write(n_reps=args.n_reps, result=True, doprint=args.quiet, iti=args.iti),
         lambda: test_write(n_reps=args.n_reps, result=False, doprint=args.quiet, iti=args.iti),
         lambda: test_write_zero(n_reps=args.n_reps, doprint=args.quiet, iti=args.iti),
-        lambda: test_readwrite(runtime=args.time)
+        lambda: test_readwrite(runtime=args.time),
+        lambda: test_readwrite_script(runtime=args.time)
     ]
 
     if args.which:
