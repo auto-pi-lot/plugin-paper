@@ -75,7 +75,6 @@ def test_readwrite(n_reps:int = 10000, doprint:bool = True, iti:float = 0.001) -
 
     def turn_on_off(*args):
         global n_times
-        print('hey')
         pin_out.set(True)
         time.sleep(0.001)
         pin_out.set(False)
