@@ -63,7 +63,7 @@ def test_write_zero(n_reps:int = 10000, doprint:bool = True, iti:float = 0.001) 
 
     return result
 
-def test_readwrite(n_reps:int = 10000, doprint:bool = True, iti:float = 0.001) -> Result:
+def test_readwrite(runtime:float=60) -> Result:
     """Test latency from external digital input to digital output"""
     out_conf = prefs.get('HARDWARE')['GPIO']['digi_out']
     in_conf = prefs.get('HARDWARE')['GPIO']['digi_in']
@@ -74,22 +74,21 @@ def test_readwrite(n_reps:int = 10000, doprint:bool = True, iti:float = 0.001) -
     n_times = 0
 
     def turn_on_off(*args):
-        global n_times
         pin_out.set(True)
         time.sleep(0.001)
         pin_out.set(False)
-        n_times += 1
 
     # cb = lambda: print('hey');pin_out.set(True)
-    pin_in.assign_cb(turn_on_off, )
+    pin_in.assign_cb(turn_on_off)
 
     pin_out.set(False)
 
-    while n_times < n_reps:
-        time.sleep(0.5)
-
-
-    return Result([0], test="readwrite")
+    try:
+        time.sleep(runtime)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        return Result([0], test="readwrite")
         
 
 def make_parser() -> argparse.ArgumentParser:
@@ -109,6 +108,10 @@ def make_parser() -> argparse.ArgumentParser:
         '-w', "--which", help="Which test (by index) to run. Otherwise run all",
         type=int, required=False
     )
+    parser.add_argument(
+        '-t', '--t', help="How long to run the readwrite test (seconds)",
+        type=float, required=False, default=60
+    )
     return parser
 
 
@@ -122,7 +125,7 @@ if __name__ == "__main__":
         lambda: test_write(n_reps=args.n_reps, result=True, doprint=args.quiet, iti=args.iti),
         lambda: test_write(n_reps=args.n_reps, result=False, doprint=args.quiet, iti=args.iti),
         lambda: test_write_zero(n_reps=args.n_reps, doprint=args.quiet, iti=args.iti),
-        lambda: test_readwrite(n_reps=args.n_reps)
+        lambda: test_readwrite(runtime=args.time)
     ]
 
     if args.which:
