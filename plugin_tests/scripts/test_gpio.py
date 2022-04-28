@@ -70,6 +70,7 @@ def test_readwrite(n_reps:int = 10000, doprint:bool = True, iti:float = 0.001) -
     pin_out = Digital_Out(**out_conf)
     pin_in = Digital_In(**in_conf)
 
+    global n_times
     n_times = 0
 
     def turn_on_off(*args):
