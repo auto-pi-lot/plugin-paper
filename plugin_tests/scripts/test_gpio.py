@@ -66,7 +66,7 @@ def test_write_zero(n_reps:int = 10000, doprint:bool = True, iti:float = 0.001) 
 def test_readwrite(n_reps:int = 10000, doprint:bool = True, iti:float = 0.001) -> Result:
     """Test latency from external digital input to digital output"""
     out_conf = prefs.get('HARDWARE')['GPIO']['digi_out']
-    in_conf = prefs.get('HARDWARE')['GPIO']['digi_out']
+    in_conf = prefs.get('HARDWARE')['GPIO']['digi_in']
     pin_out = Digital_Out(**out_conf)
     pin_in = Digital_In(**in_conf)
 
@@ -81,13 +81,13 @@ def test_readwrite(n_reps:int = 10000, doprint:bool = True, iti:float = 0.001) -
         n_times += 1
 
     # cb = lambda: print('hey');pin_out.set(True)
-    pin_in.assign_cb(turn_on_off)
+    pin_in.assign_cb(turn_on_off, )
 
     pin_out.set(False)
 
     while n_times < n_reps:
         time.sleep(0.5)
-    
+
 
     return Result([0], test="readwrite")
         
