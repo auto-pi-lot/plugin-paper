@@ -110,10 +110,13 @@ def test_readwrite_script(runtime:float=60):
     try:
         script_id = pin_out.pig.store_script(script)
         pin_out.pig.run_script(script_id)
+        time.sleep(runtime)
     finally:
         pin_out.pig.stop_script(script_id)
         pin_out.release()
         pin_in.release()
+
+    return Result([0], test="readwrite_script")
 
 
 def make_parser() -> argparse.ArgumentParser:
