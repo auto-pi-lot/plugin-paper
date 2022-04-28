@@ -70,17 +70,24 @@ def test_readwrite(n_reps:int = 10000, doprint:bool = True, iti:float = 0.001) -
     pin_out = Digital_Out(**out_conf)
     pin_in = Digital_In(**in_conf)
 
-    cb = lambda: print('hey');pin_out.set(True)
-    pin_in.assign_cb(cb)
+    n_times = 0
+
+    def turn_on_off():
+        global n_times
+        print('hey')
+        pin_out.set(True)
+        time.sleep(0.001)
+        pin_out.set(False)
+        n_times += 1
+
+    # cb = lambda: print('hey');pin_out.set(True)
+    pin_in.assign_cb(turn_on_off)
 
     pin_out.set(False)
 
-    for i in range(n_reps):
-        while not pin_out.state:
-            time.sleep(0.001)
-
-        time.sleep(0.01)
-        pin_out.set(False)
+    while n_times < n_reps:
+        time.sleep(0.5)
+    
 
     return Result([0], test="readwrite")
         
