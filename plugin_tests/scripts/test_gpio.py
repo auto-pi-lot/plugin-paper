@@ -98,8 +98,12 @@ def test_readwrite_script(runtime:float=60):
 
     script = " ".join([
         "tag 999",
-        f"w {pin_out.pin_bcm}",
         f"r {pin_in.pin_bcm}",
+        f"jz 998", # if off, jump to tag 998, else..
+        f"w {pin_out.pin_bcm} 1", #turn on
+        "jp 999", # then jump back to beginning
+        "tag 998",
+        f"w {pin_out.pin_bcm} 0",
         f"jp 999"
     ])
 
