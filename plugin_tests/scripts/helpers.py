@@ -35,7 +35,8 @@ class Result:
             'test': self.test,
             'times': self.times,
             'mean': self.mean,
-            'std': self.std
+            'std': self.std,
+            'n_reps': len(self.times)
         }
 
     def __str__(self) -> str:

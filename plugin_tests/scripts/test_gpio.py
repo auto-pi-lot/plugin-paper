@@ -14,7 +14,7 @@ import json
 
 
 
-def test_write(n_reps:int = 10000, result:bool=True, doprint:bool = True, iti:float = 1) -> Result:
+def test_write(n_reps:int = 10000, result:bool=True, doprint:bool = True, iti:float = 0.001) -> Result:
     # get the configuration for our output pin from prefs.json
     pin_conf = prefs.get('HARDWARE')['GPIO']['digi_out']
     pin = Digital_Out(**pin_conf)
@@ -40,7 +40,7 @@ def test_write(n_reps:int = 10000, result:bool=True, doprint:bool = True, iti:fl
     return result
 
 
-def test_write_zero(n_reps:int = 10000, doprint:bool = True, iti:float = 1) -> Result:
+def test_write_zero(n_reps:int = 10000, doprint:bool = True, iti:float = 0.001) -> Result:
     """Same thing as above but with Digital Out Zero, sorry this isn't more reusable it's just a test!"""
     # get the configuration for our output pin from prefs.json
     pin_conf = prefs.get('HARDWARE')['GPIO']['digi_out']
@@ -63,6 +63,27 @@ def test_write_zero(n_reps:int = 10000, doprint:bool = True, iti:float = 1) -> R
 
     return result
 
+def test_readwrite(n_reps:int = 10000, doprint:bool = True, iti:float = 0.001) -> Result:
+    """Test latency from external digital input to digital output"""
+    out_conf = prefs.get('HARDWARE')['GPIO']['digi_out']
+    in_conf = prefs.get('HARDWARE')['GPIO']['digi_out']
+    pin_out = Digital_Out(**out_conf)
+    pin_in = Digital_In(**in_conf)
+
+    cb = lambda: pin_out.set(True)
+    pin_in.assign_cb(cb)
+
+    pin_out.set(False)
+
+    for i in range(n_reps):
+        while not pin_out.state:
+            time.sleep(0.001)
+
+        time.sleep(0.001)
+        pin_out.set(False)
+
+    return Result([0], test="readwrite")
+        
 
 def make_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
@@ -93,7 +114,8 @@ if __name__ == "__main__":
     tests = [
         lambda: test_write(n_reps=args.n_reps, result=True, doprint=args.quiet, iti=args.iti),
         lambda: test_write(n_reps=args.n_reps, result=False, doprint=args.quiet, iti=args.iti),
-        lambda: test_write_zero(n_reps=args.n_reps, doprint=args.quiet, iti=args.iti)
+        lambda: test_write_zero(n_reps=args.n_reps, doprint=args.quiet, iti=args.iti),
+        lambda: test_readwrite(n_reps=args.n_reps)
     ]
 
     if args.which:
