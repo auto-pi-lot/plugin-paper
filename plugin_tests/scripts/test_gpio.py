@@ -109,7 +109,7 @@ def make_parser() -> argparse.ArgumentParser:
         type=int, required=False
     )
     parser.add_argument(
-        '-t', '--t', help="How long to run the readwrite test (seconds)",
+        '-t', '--time', help="How long to run the readwrite test (seconds)",
         type=float, required=False, default=60
     )
     return parser
