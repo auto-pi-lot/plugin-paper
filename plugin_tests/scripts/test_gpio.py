@@ -70,7 +70,7 @@ def test_readwrite(n_reps:int = 10000, doprint:bool = True, iti:float = 0.001) -
     pin_out = Digital_Out(**out_conf)
     pin_in = Digital_In(**in_conf)
 
-    cb = lambda: pin_out.set(True)
+    cb = lambda: print('hey');pin_out.set(True)
     pin_in.assign_cb(cb)
 
     pin_out.set(False)
@@ -79,7 +79,7 @@ def test_readwrite(n_reps:int = 10000, doprint:bool = True, iti:float = 0.001) -
         while not pin_out.state:
             time.sleep(0.001)
 
-        time.sleep(0.001)
+        time.sleep(0.01)
         pin_out.set(False)
 
     return Result([0], test="readwrite")
