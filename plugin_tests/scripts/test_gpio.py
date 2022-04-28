@@ -98,7 +98,7 @@ def test_readwrite_script(runtime:float=60):
 
     script = " ".join([
         "tag 999",
-        f"w {pin_out.pin_bcm}"
+        f"w {pin_out.pin_bcm}",
         f"r {pin_in.pin_bcm}",
         f"jp 999"
     ])
