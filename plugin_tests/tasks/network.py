@@ -5,7 +5,7 @@ from autopilot import prefs
 from pydantic import Field
 from datetime import datetime
 from threading import Event
-from asyncio import Queue
+from queue import Queue
 from typing import Optional
 
 class Network_Latency(Task):
@@ -118,6 +118,24 @@ class Network_Latency(Task):
         self.quitting.set()
         self.ready_event.set()
 
+    def _volley(self, i:int, subject:str):
+
+        send_time = datetime.now().isoformat()
+        self.node.send(to="follower", key="CALL", value={'message_number': i})
+
+        response = self.response_q.get()
+        if response['message_number'] != i:
+            self.logger.warning(f"Received response out of order? i:{i}, response:{response['message_number']}")
+
+        self.node.send(to='T', key='DATA', value={
+            'send_time': send_time,
+            'recv_time': response['recv_time'],
+            'trial_n': i,
+            'subject': subject,
+            'pilot': 'leader',
+            'TRIAL_END': True,
+        })
+
     def volley(self):
 
         subject = prefs.get('SUBJECT')
@@ -131,23 +149,7 @@ class Network_Latency(Task):
 
         for i in range(self.n_messages):
 
-            send_time = datetime.now().isoformat()
-            self.node.send(to="follower", key="CALL", value={'message_number': i})
-
-            response = await self.response_q.get()
-            if response['message_number'] != i:
-                self.logger.warning(f"Received response out of order? i:{i}, response:{response['message_number']}")
-
-
-            self.node.send(to='T', key='DATA', value= {
-                'send_time':send_time,
-                'recv_time':response['recv_time'],
-                'trial_n':i,
-                'subject': subject,
-                'pilot': 'leader',
-                'TRIAL_END':True,
-            } )
-
+            self._volley(i, subject)
 
             if self.quitting.is_set():
                 break
