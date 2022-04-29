@@ -118,6 +118,22 @@ def test_readwrite_script(runtime:float=60):
 
     return Result([0], test="readwrite_script")
 
+def test_series_jitter(n_reps=521):
+    """
+    Jitter of a script output
+    """
+    out_conf = prefs.get('HARDWARE')['GPIO']['digi_out']
+    pin_out = Digital_Out(**out_conf)
+
+    # On/Off the output for 5 microseconds
+    pin_out.store_series('open', values=[1,0], durations=[5, 495], unit='us')
+
+    for i in range(n_reps):
+        pin_out.series('open')
+        time.sleep(0.001)
+
+    return Result([0], test="series_jitter")
+
 
 def make_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
@@ -154,7 +170,8 @@ if __name__ == "__main__":
         lambda: test_write(n_reps=args.n_reps, result=False, doprint=args.quiet, iti=args.iti),
         lambda: test_write_zero(n_reps=args.n_reps, doprint=args.quiet, iti=args.iti),
         lambda: test_readwrite(runtime=args.time),
-        lambda: test_readwrite_script(runtime=args.time)
+        lambda: test_readwrite_script(runtime=args.time),
+        lambda: test_series_jitter(n_reps=args.n_reps)
     ]
 
     if args.which:
