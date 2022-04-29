@@ -120,10 +120,12 @@ class Network_Latency(Task):
 
     def volley(self):
 
+        subject = prefs.get('SUBJECT')
+
         if self.role == "leader":
             self.ready_event.wait()
         else:
-            # follower just waits, all of its actions happen in callbacks
+            # follower just waits and then returns, all of its actions happen in callbacks
             self.quitting.wait()
             return {}
 
@@ -136,12 +138,16 @@ class Network_Latency(Task):
             if response['message_number'] != i:
                 self.logger.warning(f"Received response out of order? i:{i}, response:{response['message_number']}")
 
-            yield {
+
+            self.node.send(to='T', key='DATA', value= {
                 'send_time':send_time,
                 'recv_time':response['recv_time'],
                 'trial_n':i,
-                'TRIAL_END':True
-            }
+                'subject': subject,
+                'pilot': 'leader',
+                'TRIAL_END':True,
+            } )
+
 
             if self.quitting.is_set():
                 break
