@@ -24,7 +24,8 @@ class Network_Latency(Task):
         'data': {
             'latency': 'line'
         },
-        'x_width': 1000
+        'x_width': 1000,
+        'y_range': [0,3]
     }
 
     class TrialData(Trial_Data):
