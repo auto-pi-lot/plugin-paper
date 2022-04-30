@@ -76,6 +76,7 @@ class Network_Latency(Task):
         del start_msg['stage_block']
         start_msg['role'] = 'follower'
         start_msg['leader_ip'] = self.node.ip
+        start_msg['n_messages'] = self.n_messages
 
         # send multihop message to start the follower!
         to = ['T', self.follower_id]
