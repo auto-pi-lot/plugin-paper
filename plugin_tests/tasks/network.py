@@ -78,7 +78,7 @@ class Network_Latency(Task):
         start_msg['leader_ip'] = self.node.ip
 
         # send multihop message to start the follower!
-        to = [prefs.get('NAME'), 'T', self.follower_id]
+        to = ['T', self.follower_id]
         self.logger.debug(f"sending message to: {to}")
         self.node.send(to=to,
                        key="START",
