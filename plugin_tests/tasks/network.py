@@ -20,9 +20,16 @@ class Network_Latency(Task):
         'type': 'str'
     }
 
+    PLOT = {
+        'data': {
+            'latency': 'point'
+        }
+    }
+
     class TrialData(Trial_Data):
         send_time: datetime = Field(..., description="Timestamp of sending the initial message")
         recv_time: datetime = Field(..., description="Timestamp of when the message was received by the second pi")
+        latency: float = Field(..., description="Difference between receive and send time, in ms")
 
     LEADER_PORT = 5580
     FOLLOWER_PORT = 5581
@@ -147,19 +154,24 @@ class Network_Latency(Task):
 
     def _volley(self, i:int, subject:str):
 
-        send_time = datetime.now().isoformat()
+        send_time = datetime.now()
         self.node.send(to="follower", key="CALL", value={'message_number': i})
 
         response = self.response_q.get()
         if response['message_number'] != i:
             self.logger.warning(f"Received response out of order? i:{i}, response:{response['message_number']}")
 
+        # get difference
+        recv_time = datetime.fromisoformat(response['recv_time'])
+        latency = (recv_time - send_time).total_seconds() * 1000
+
+
         self.node.send(to='T', key='DATA', value={
-            'send_time': send_time,
-            'recv_time': response['recv_time'],
-            'trial_n': i,
+            'send_time': send_time.isoformat(),
+            'recv_time': recv_time.isoformat(),
+            'latency': latency,
+            'trial_num': i,
             'subject': subject,
-            'pilot': 'leader',
             'TRIAL_END': True,
         })
 
