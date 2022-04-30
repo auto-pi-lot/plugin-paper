@@ -100,6 +100,7 @@ class Network_Latency(Task):
     def init_networking(self,) -> Net_Node:
         return Net_Node(
             id=f"{self.role}",
+            instance=False,
             upstream=self.upstream,
             port=self.upstream_port,
             upstream_ip=self.upstream_ip,
