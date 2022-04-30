@@ -22,8 +22,9 @@ class Network_Latency(Task):
 
     PLOT = {
         'data': {
-            'latency': 'point'
-        }
+            'latency': 'line'
+        },
+        'x_width': 1000
     }
 
     class TrialData(Trial_Data):
