@@ -170,6 +170,7 @@ class Network_Latency(Task):
             'send_time': send_time.isoformat(),
             'recv_time': recv_time.isoformat(),
             'latency': latency,
+            'pilot': prefs.get('NAME'),
             'trial_num': i,
             'subject': subject,
             'TRIAL_END': True,
@@ -197,5 +198,6 @@ class Network_Latency(Task):
 
     def end(self):
         self.node.release()
+        self.quitting.set()
         super(Network_Latency, self).end()
 
