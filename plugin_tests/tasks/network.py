@@ -73,6 +73,7 @@ class Network_Latency(Task):
         self.node.send(to='T', key="INIT", value={})
 
         start_msg = self.start_kwargs.copy()
+        del start_msg['stage_block']
         start_msg['role'] = 'follower'
         start_msg['leader_ip'] = self.node.ip
 
@@ -180,4 +181,8 @@ class Network_Latency(Task):
                 break
 
         self.node.send(to='follower', key="STOP", value={})
+
+    def end(self):
+        self.node.release()
+        super(Network_Latency, self).end()
 
