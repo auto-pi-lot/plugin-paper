@@ -69,13 +69,17 @@ class Network_Latency(Task):
 
 
         self.node = self.init_networking()
+        # make initial connection to terminal
+        self.node.send(to='T', key="INIT", value={})
 
         start_msg = self.start_kwargs.copy()
         start_msg['role'] = 'follower'
         start_msg['leader_ip'] = self.node.ip
 
         # send multihop message to start the follower!
-        self.node.send(to=[prefs.get('NAME'), 'T', self.follower_id],
+        to = [prefs.get('NAME'), 'T', self.follower_id]
+        self.logger.debug(f"sending message to: {to}")
+        self.node.send(to=to,
                        key="START",
                        value=start_msg)
 
@@ -98,7 +102,7 @@ class Network_Latency(Task):
         self.node.send(to='leader', key="READY", value={})
 
     def init_networking(self,) -> Net_Node:
-        return Net_Node(
+        node = Net_Node(
             id=f"{self.role}",
             instance=False,
             upstream=self.upstream,
@@ -107,6 +111,8 @@ class Network_Latency(Task):
             router_port=self.router_port,
             listens=self.listens
         )
+        return node
+
 
     def l_ready(self, msg):
         """
