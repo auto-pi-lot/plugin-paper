@@ -15,6 +15,10 @@ class Network_Latency(Task):
         'tag': 'Number of messages to send back and forth',
         'type': 'int'
     }
+    PARAMS['follower_id'] = {
+        'tag': 'ID of the pilot that will be used as the follower, needed to route the start message to it',
+        'type': 'str'
+    }
 
     class TrialData(Trial_Data):
         send_time: datetime = Field(..., description="Timestamp of sending the initial message")
@@ -23,18 +27,20 @@ class Network_Latency(Task):
     LEADER_PORT = 5580
     FOLLOWER_PORT = 5581
 
-    def __init__(self, n_messages:int=None, role:str="leader", leader_ip:str=None, **kwargs):
+    def __init__(self, n_messages:int=None, role:str="leader", leader_ip:str=None, follower_id:str=None, **kwargs):
         super(Network_Latency, self).__init__(**kwargs)
 
         self.n_messages = int(n_messages)
         self.role = role
         self.node = None # type: Optional[Net_Node]
+        self.follower_id = follower_id
         self.leader_ip = leader_ip
         self.ready_event = Event()
         self.ready_event.clear()
         self.quitting = Event()
         self.quitting.clear()
         self.response_q = Queue()
+        self.start_kwargs = kwargs
 
         self.listens = {
             'READY': self.l_ready,
@@ -60,7 +66,19 @@ class Network_Latency(Task):
         self.upstream_ip = prefs.get('TERMINALIP')
         self.router_port = self.LEADER_PORT
 
+
+
         self.node = self.init_networking()
+
+        start_msg = self.start_kwargs.copy()
+        start_msg['role'] = 'follower'
+        start_msg['leader_ip'] = self.node.ip
+
+        # send multihop message to start the follower!
+        self.node.send(to=[prefs.get('NAME'), 'T', self.follower_id],
+                       key="START",
+                       value=start_msg)
+
 
     def init_follower(self):
         """
