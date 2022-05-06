@@ -31,9 +31,11 @@ def test_sound(n_reps:int=-1, iti=0.5, duration:float=100):
     n_loops = 0
     try:
         while n_reps < 0 or n_loops < n_reps:
-
-            pin_out.pulse()
-            tone.stop_evt.wait()
+            # could use pulse but want a longer pulse yno
+            pin_out.set(True)
+            time.sleep(0.001)
+            pin_out.set(False)
+            tone.stop_evt.wait(5)
             tone.buffer()
 
             time.sleep(iti)
