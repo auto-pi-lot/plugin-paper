@@ -26,6 +26,7 @@ def test_sound(n_reps:int=-1, iti=0.5, duration:float=100):
 
     def play_wrapper(*args):
         tone.play()
+        print('played')
     pin_in.assign_cb(play_wrapper)
 
     n_loops = 0
