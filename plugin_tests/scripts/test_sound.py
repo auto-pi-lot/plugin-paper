@@ -13,6 +13,7 @@ import argparse
 def start_jack_server():
     jackd_process = external.start_jackd()
     server = jackclient.JackClient()
+    server.start()
     return jackd_process, server
 
 def test_sound(n_reps:int=-1, iti=0.5, duration:float=100):
