@@ -24,7 +24,9 @@ def test_sound(n_reps:int=-1, iti=0.5, duration:float=100):
     pin_out = Digital_Out(**out_conf)
     pin_in = Digital_In(**in_conf)
 
-    pin_in.assign_cb(tone.play)
+    def play_wrapper(*args):
+        tone.play()
+    pin_in.assign_cb(play_wrapper)
 
     n_loops = 0
     try:
