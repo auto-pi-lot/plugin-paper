@@ -16,7 +16,7 @@ def start_jack_server():
     return jackd_process, server
 
 def test_sound(n_reps:int=-1, iti=0.5, duration:float=100):
-    tone = sounds.Tone(10000, duration=100, amplitude=0.01)
+    tone = sounds.Tone(10000, duration=100, amplitude=0.1)
     tone.buffer()
 
     out_conf = prefs.get('HARDWARE')['GPIO']['digi_out']
