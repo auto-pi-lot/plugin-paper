@@ -61,4 +61,11 @@ if __name__ == "__main__":
     parser = make_parser()
     args = parser.parse_args()
 
-    test_sound(args.n_reps, args.iti)
+    jackd_proc, server = start_jack_server()
+
+    try:
+        test_sound(args.n_reps, args.iti)
+
+    finally:
+        server.quit()
+        jackd_proc.kill()
