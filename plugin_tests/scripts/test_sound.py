@@ -12,7 +12,7 @@ import argparse
 
 def start_jack_server():
     jackd_process = external.start_jackd()
-    server = jackclient.JackClient()
+    server = jackclient.JackClient(disable_gc=True)
     server.start()
     return jackd_process, server
 
