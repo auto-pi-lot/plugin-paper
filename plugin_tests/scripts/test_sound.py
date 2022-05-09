@@ -34,7 +34,10 @@ def test_sound(n_reps:int=-1, iti=0.5, duration:float=100):
     try:
         while n_reps < 0 or n_loops < n_reps:
             # could use pulse but want a longer pulse yno
-            pin_out.pulse()
+            # pin_out.pulse()
+            pin_out.set(True)
+            time.sleep(0.001)
+            pin_out.set(False)
             time.sleep(0.2)
             tone.stop_evt.wait(5)
             tone.buffer()
@@ -87,7 +90,7 @@ if __name__ == "__main__":
     if args.list:
         for i, test in enumerate(TESTS):
             print(f"{i}: {test}")
-            sys.exit(0)
+        sys.exit(0)
 
     test = TESTS[args.which]
     print(f'running test {args.which}:\n{test}')

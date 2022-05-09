@@ -1,6 +1,7 @@
 from pathlib import Path
 import subprocess
 import pandas as pd
+from ds1054z import DS1054Z
 
 
 def save_trace(ip:str, path:Path=Path('.'), base_name:str="OscTrace", mode:str="NORM"):
@@ -58,11 +59,15 @@ def save_all_traces(
     dfs = pd.concat(traces, ignore_index=True)
 
     # get a filename that increments in number based on existing files in directory
-    current_files = list(path.glob(f'{base_name}*.csv'))
-    trace_n = len(current_files)
+    try:
+        path = Path(path)
+        current_files = list(path.glob(f'{base_name}*.csv'))
+        trace_n = len(current_files)
 
-    out_fn = path / f"{base_name}_{trace_n}.csv"
-    dfs.to_csv(out_fn, index=False)
+        out_fn = path / f"{base_name}_{trace_n}.csv"
+        dfs.to_csv(out_fn, index=False)
+    except Exception as e:
+        raise RuntimeError(f"Could not save traces, got exception:\n{e}")
     return dfs
 
 
@@ -70,6 +75,5 @@ def save_all_traces(
 
 
 if __name__ == "__main__":
-    from ds1054z import DS1054Z
     osc_ip = "192.168.0.163"
     save_trace(osc_ip)
