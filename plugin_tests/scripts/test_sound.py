@@ -36,10 +36,9 @@ def test_sound(n_reps:int=-1, iti=0.5, duration:float=100):
             # could use pulse but want a longer pulse yno
             # pin_out.pulse()
             pin_out.set(True)
-            time.sleep(0.001)
-            pin_out.set(False)
-            time.sleep(0.2)
+            # time.sleep(0.2)
             tone.stop_evt.wait(5)
+            pin_out.set(False)
             tone.buffer()
 
             time.sleep(iti)
