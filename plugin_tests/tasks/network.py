@@ -209,7 +209,7 @@ class Network_Latency(Task):
         for i in range(self.n_messages):
 
             self._volley(i, subject)
-            time.sleep(self.iti/1000)
+            sleep(self.iti/1000)
 
             if self.quitting.is_set():
                 break
