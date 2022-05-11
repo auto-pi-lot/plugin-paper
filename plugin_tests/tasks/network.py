@@ -7,6 +7,7 @@ from datetime import datetime
 from threading import Event
 from queue import Queue
 from typing import Optional
+from time import sleep
 
 class Network_Latency(Task):
 
@@ -18,6 +19,10 @@ class Network_Latency(Task):
     PARAMS['follower_id'] = {
         'tag': 'ID of the pilot that will be used as the follower, needed to route the start message to it',
         'type': 'str'
+    }
+    PARAMS['iti'] = {
+        'tag': 'inter-trial interval, in ms',
+        'type': 'float'
     }
 
     PLOT = {
@@ -36,7 +41,7 @@ class Network_Latency(Task):
     LEADER_PORT = 5580
     FOLLOWER_PORT = 5581
 
-    def __init__(self, n_messages:int=None, role:str="leader", leader_ip:str=None, follower_id:str=None, **kwargs):
+    def __init__(self, n_messages:int=None, iti:float=5, role:str="leader", leader_ip:str=None, follower_id:str=None, **kwargs):
         super(Network_Latency, self).__init__(**kwargs)
 
         self.n_messages = int(n_messages)
@@ -49,6 +54,7 @@ class Network_Latency(Task):
         self.quitting = Event()
         self.quitting.clear()
         self.response_q = Queue()
+        self.iti = iti
         self.start_kwargs = kwargs
 
         self.listens = {
@@ -137,7 +143,14 @@ class Network_Latency(Task):
         with the time that we received it.
         """
         received = datetime.now().isoformat()
-        self.node.send(to="leader", key="RESPONSE", value={'recv_time': received, 'message_number':msg['message_number']})
+        self.node.send(
+            to="leader", 
+            key="RESPONSE", 
+            value={
+            'recv_time': received, 
+            'message_number':msg['message_number']
+            }, 
+            flags={'NOREPEAT':True})
 
 
     def l_response(self, msg):
@@ -157,7 +170,11 @@ class Network_Latency(Task):
     def _volley(self, i:int, subject:str):
 
         send_time = datetime.now()
-        self.node.send(to="follower", key="CALL", value={'message_number': i})
+        self.node.send(
+            to="follower", 
+            key="CALL", 
+            value={'message_number': i}, 
+            flags={'NOREPEAT':True})
 
         response = self.response_q.get()
         if response['message_number'] != i:
@@ -192,6 +209,7 @@ class Network_Latency(Task):
         for i in range(self.n_messages):
 
             self._volley(i, subject)
+            time.sleep(self.iti/1000)
 
             if self.quitting.is_set():
                 break
