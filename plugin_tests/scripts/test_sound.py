@@ -11,9 +11,9 @@ import time
 import sys
 import argparse
 
-def start_jack_server(freewheel=False):
+def start_jack_server():
     jackd_process = external.start_jackd()
-    server = jackclient.JackClient(disable_gc=True, freewheel=freewheel)
+    server = jackclient.JackClient(disable_gc=True)
     server.start()
     return jackd_process, server
 
@@ -69,10 +69,6 @@ def make_parser() -> argparse.ArgumentParser:
         '-l', '--list', help="List available jackd test settings",
         action='store_true', required=False
     )
-    parser.add_argument(
-        '-f', '--freewheel', help="Use jackd freewheel mode",
-        action='store_true', required=False
-    )
     return parser
 
 
@@ -100,7 +96,7 @@ if __name__ == "__main__":
 
     prefs.set('JACKDSTRING', TESTS[args.which])
 
-    jackd_proc, server = start_jack_server(freewheel=args.freewheel)
+    jackd_proc, server = start_jack_server()
 
     try:
         test_sound(args.n_reps, args.iti)
