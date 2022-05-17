@@ -1,13 +1,13 @@
 from autopilot.hardware.gpio import Digital_Out, Digital_In
 from autopilot import prefs
-from plugin_tests.hardware.zero import Digital_Out_Zero
+from plugin_paper.hardware.zero import Digital_Out_Zero
 import numpy as np
 import time
 import timeit
 import argparse
 import typing
 from pathlib import Path
-from plugin_tests.scripts.helpers import Result, Results
+from plugin_paper.scripts.helpers import Result, Results
 from tqdm import tqdm, trange
 import datetime
 import json

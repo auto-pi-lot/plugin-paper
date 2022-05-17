@@ -1,18 +1,21 @@
 [tool.poetry]
-name = "plugin-tests"
+name = "plugin-paper"
 version = "0.1.0"
 description = "Tests for the autopilot paper"
 authors = ["sneakers-the-rat <JLSaunders987@gmail.com>"]
 license = "Unlicense"
 packages = [
-    { include = "plugin_tests" }
+    { include = "plugin_paper" }
 ]
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.10"
-auto-pi-lot = {git="https://github.com/wehr-lab/autopilot", branch="v0.5.0", extras=['pilot']}
+auto-pi-lot = [
+    {git="https://github.com/wehr-lab/autopilot", branch="v0.5.0", extras=['pilot'], markers="platform_machine=='armv7l'"},
+    {git="https://github.com/wehr-lab/autopilot", branch="v0.5.0", markers="platform_machine!='armv7l'"},
+]
 gpiozero = "^1.6.2"
-"RPi.GPIO" = "^0.7.1"
+"RPi.GPIO" = {version="^0.7.1", markers="platform_machine=='armv7l'"}
 
 
 [tool.poetry.dev-dependencies]

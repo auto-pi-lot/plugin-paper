@@ -54,7 +54,7 @@ datajoint = ["datajoint-babel (>=0.1.9,<0.2.0)"]
 type = "git"
 url = "https://github.com/wehr-lab/autopilot"
 reference = "v0.5.0"
-resolved_reference = "95502d4ffa4eace3ebdb3b2aa1bb14d24ef2bf33"
+resolved_reference = "d140908da11bf8c64511c7920f303734ca103fa1"
 
 [[package]]
 name = "blosc2"
@@ -561,7 +561,7 @@ test = ["pytest (>=2.2.3)", "flake8 (>=2.4.0)", "isort (>=4.2.2)"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.9,<3.10"
-content-hash = "f6715d668d6e82d786bd2b6d029fcc476ed825894ec29d15bc56eeeec9934b35"
+content-hash = "1c32a5386524b5514902cb056833cb1e8894fe50c4204ed58b179d81934ee4fd"
 
 [metadata.files]
 attrs = [
