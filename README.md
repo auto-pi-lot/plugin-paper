@@ -1,6 +1,6 @@
 # plugin-paper
 
-Plugin accompanying the [autopilot paper](https://github.com/auto-pi-lot/autopilot)
+Plugin accompanying the [autopilot paper](https://github.com/auto-pi-lot/autopilot-paper), also see its [wiki entry](https://wiki.auto-pi-lot.com/index.php/Plugin:Autopilot_Paper)
 
 To use, clone into your autopilot plugins directory (default `~/autopilot/plugins`) and then install
 the dependencies from `pyproject.toml` using `pip` (`pip install .` from repository root) or poetry
